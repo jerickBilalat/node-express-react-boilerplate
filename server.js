@@ -2,6 +2,11 @@
 const express = require('express');
 const app = express();
 
+const eventsRoute = require('./routes/events');
+
+// ROUTES
+eventsRoute(app);
+
 app.get('/', (req,res) => {
     res.send('Hello World');
 });
