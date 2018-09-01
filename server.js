@@ -1,6 +1,11 @@
 
 const express = require('express');
 const app = express();
+const keys = require('./config/keys');
+const mongoose = require('mongoose');
+
+// DB connection
+mongoose.connect(keys.mongoURI);
 
 const eventsRoute = require('./routes/events');
 
