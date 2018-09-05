@@ -8,12 +8,14 @@
     "npm": "5.6.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "mongoose": "^5.2.12"
+    "mongoose": "^4.11.1",
+    "nodemon": "^1.18.4"
   }
 }

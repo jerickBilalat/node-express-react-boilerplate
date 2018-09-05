@@ -16,4 +16,4 @@ const eventSchema = new Schema({
     comments: [commentSchema]
 });
 
-mongoose.model('Event', eventsSchema);
+mongoose.model('Event', eventSchema);

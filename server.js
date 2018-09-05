@@ -1,23 +1,31 @@
 
 const express = require('express');
-const app = express();
 const keys = require('./config/keys');
-const eventsRoute = require('./routes/events');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
 require('./models/events');
 
 // DB connection
+mongoose.Promise = global.Promise;
 mongoose.connect(keys.mongoURI);
 
+const app = express();
+
+// SETTINGS
+app.set('port', process.env.PORT || 3000);
+
+// MIDDLEWARE
+app.use(bodyParser.json());
+
 // ROUTES
-eventsRoute(app);
+require('./routes/events')(app);
 
 app.get('/', (req,res) => {
     res.send('Hello World');
 });
 
-// SETTINGS
-app.set('port', process.env.PORT || 3000);
+
 
 const server = app.listen(app.get('port'),() => {
     console.log('Express listening to port: ' +  server.address().port);
