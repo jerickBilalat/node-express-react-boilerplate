@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 require('./models/events');
+require('./authetication/model');
 
 // DB connection
 mongoose.Promise = global.Promise;
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 // ROUTES
 require('./routes/events')(app);
+require('./authetication/routes')(app);
 
 app.get('/', (req,res) => {
     res.send('Hello World');
