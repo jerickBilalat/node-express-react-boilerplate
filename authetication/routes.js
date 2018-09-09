@@ -5,5 +5,6 @@ const requireMember = require('./middlewares/requireMember');
 module.exports = app => {
 
     app.post('/signup', requireMember, AuthControllers.signup);
+    app.post('/login', AuthControllers.login)
 
 }
