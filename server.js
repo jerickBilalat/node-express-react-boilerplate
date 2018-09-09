@@ -4,7 +4,7 @@ const keys = require('./config/keys');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-require('./models/events');
+require('./events/model');
 require('./authetication/model');
 
 // DB connection
@@ -20,7 +20,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 
 // ROUTES
-require('./routes/events')(app);
+require('./events/routes')(app);
 require('./authetication/routes')(app);
 
 app.get('/', (req,res) => {
