@@ -3,6 +3,7 @@ const express = require('express');
 const keys = require('./config/keys');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 require('./events/model');
 require('./authetication/model');
@@ -16,8 +17,9 @@ const app = express();
 // SETTINGS
 app.set('port', process.env.PORT || 3000);
 
-// MIDDLEWARE
+// APPLICATON MIDDLEWARES
 app.use(bodyParser.json());
+app.use(cors());
 
 // ROUTES
 require('./events/routes')(app);
