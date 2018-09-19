@@ -1,14 +1,8 @@
-const jwt = require('jwt-simple');
-const config = require('../../config/secret');
+const {generateToken} = require('../utils');
 const UserClass = require('../model');
 
-function tokenForUser(user) {
-    const timeStamp = new Date().getTime();
-    return jwt.encode({sub: user.id, iat: timeStamp}, config.secret);
-}
-
 function validateEmailOrPassword(email, password, res) {
-    // add email valication here
+    // add email validation here
     if(!email||!password) {
         return res.status(422).send({
             error: "You must provide email or password"
@@ -20,9 +14,7 @@ function validateEmailOrPassword(email, password, res) {
 
 module.exports.signup = (req, res, next) => {
 
-    const email = req.body.email;
-    const password = req.body.password;
-    const role = req.body.role;
+    const {email, password, role} = req.body
 
     validateEmailOrPassword(email, password, res);    
 
@@ -31,7 +23,7 @@ module.exports.signup = (req, res, next) => {
         .then( user => {
             
             if(user) {
-                res.status(422).send({ message: "Email is in use"})
+                return res.status(422).send({ message: "Email is in use"})
             }
 
             const newUser = new UserClass({
@@ -43,7 +35,7 @@ module.exports.signup = (req, res, next) => {
             newUser
                 .save()
                 .then( user => {
-                    res.json({role, token:tokenForUser(user)});
+                    res.json({role, token: generateToken(user)});
                 })
                 .catch( err => {
                     return next(err);

@@ -1,6 +1,10 @@
+const User = require('../model');
+const config = require('../../config/secret');
+const utils = require('../utils');
 
-// note: need the what is the user role to know which components they have access to
 
 module.exports.signin = (req,res, next) => {
-    res.send({message: "signin"});
+   // passport made req.user
+   console.log(req.user);
+   res.send({ role: req.role, token: utils.generateToken(req.user)  })
 }
