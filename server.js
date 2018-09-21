@@ -10,7 +10,10 @@ require('./events/model');
 require('./authetication/model');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI);
+mongoose
+    .connect(keys.mongoURI, {useMongoClient: true})
+    .then(() => { console.log("Database connection success")})
+    .catch((error) => console.warn('warning', error));
 
 const app = express();
 
