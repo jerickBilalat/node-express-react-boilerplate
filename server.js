@@ -11,7 +11,7 @@ require('./authetication/model');
 
 mongoose.Promise = global.Promise;
 mongoose
-    .connect(keys.mongoURI, {useMongoClient: true})
+    .connect('mongodb://localhost/events_dev', {useMongoClient: true})
     .then(() => { console.log("Database connection success")})
     .catch((error) => console.warn('warning', error));
 
