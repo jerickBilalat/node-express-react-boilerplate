@@ -6,7 +6,10 @@ import configureStore from "./store/configureStore.dev";
 import { loadEvents } from "./actions/eventActions";
 
 import Dashboard from "./components/dashboard";
+import Header from "./components/header";
 import ManageEventPage from "./components/event/ManageEventPage";
+import SignUpPage from "./components/auth/SignUpPage";
+import SignInPage from "./components/auth/SignInPage";
 
 import "./styles.css";
 
@@ -19,9 +22,12 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <div>
+          <Header />
           <Route exact path="/" component={Dashboard} />
           <Route exact path="/event/manage" component={ManageEventPage} />
           <Route exact path="/event/manage/:id" component={ManageEventPage} />
+          <Route exact path="/auth/signup" component={SignUpPage} />
+          <Route exact path="/auth/signin" component={SignInPage} />
         </div>
       </BrowserRouter>
     </Provider>

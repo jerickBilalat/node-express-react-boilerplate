@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as eventActions from "../../actions/eventActions";
 import InputText from "../common/textInput";
+import requireAuth from "../hocs/requireAuthHOC";
 
 class ManageEventPage extends Component {
   constructor(props) {
@@ -132,4 +133,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ManageEventPage);
+)(requireAuth(ManageEventPage));

@@ -43,7 +43,7 @@ export function saveEvent(event) {
           : dispatch(createEventSuccess(savedEvent)); // eslint-disable-line no-unused-expressions
       })
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallError());
         throw error;
       });
   };
@@ -56,7 +56,7 @@ export function deleteEvent(eventID) {
       .deleteEvent(eventID)
       .then(() => dispatch(deleteEventSuccess(eventID)))
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallError());
         throw error;
       });
   };
