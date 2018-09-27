@@ -8,30 +8,35 @@ const EventItem = ({
   authorRole,
   body,
   createdAt,
-  onDeleteEvent
+  onDeleteEvent,
+  deleting
 }) => (
   <li>
     <h4>
       <Link to={`/event/manage/${id}`}>{title}</Link>
-    </h4>    {" "}
-    |    {" "}
+    </h4>
     <span>
       <Link to={`/event/manage/${id}`}>Edit</Link>
-    </span>    {" "}
-    |    {" "}
+    </span>
     <span>
-      <button onClick={e => onDeleteEvent(id, e)}>Delete</button>
-    </span>    {" "}
-    |     <span>{id}</span>
+      <input
+        type="button"
+        value={deleting ? "Deleting..." : "Delete"}
+        onClick={e => onDeleteEvent(id, e)}
+      />
+    </span>
+    <span>{id}</span>
     <p>{body}</p>
     <p>
-      By      {" "}
+      <span>By:</span>
       <span>
-        {author} |         {authorRole}
+        {author}
+        {authorRole}
       </span>
     </p>
     <p>
-      Created at:       <span>{createdAt}</span>
+      <span>Created At:</span>
+      <span>{createdAt}</span>
     </p>
   </li>
 );

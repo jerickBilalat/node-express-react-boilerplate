@@ -9,27 +9,39 @@ import EventList from "./eventList";
 class Event extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      deleting: false
+    };
     this.onDeleteEvent = this.onDeleteEvent.bind(this);
   }
 
   // eslint-disable-next-line no-unused-vars
   onDeleteEvent(eventID, e) {
     const { actions } = this.props;
+    this.setState({ deleting: true });
     actions
       .deleteEvent(eventID)
-      .then(() => console.log("notify delete success"))
+      .then(() => {
+        this.setState({ deleting: false });
+        console.log("notify delete success");
+      })
       .catch(error => console.log(error));
   }
 
   render() {
     const { events } = this.props;
+    const { deleting } = this.state;
     if (!events) return null;
     return (
       <div style={{ border: "1px solid black" }}>
         <div>
           <Link to="/event/manage/">Add Event</Link>
         </div>
-        <EventList events={events} onDeleteEvent={this.onDeleteEvent} />
+        <EventList
+          events={events}
+          onDeleteEvent={this.onDeleteEvent}
+          deleting={deleting}
+        />
       </div>
     );
   }

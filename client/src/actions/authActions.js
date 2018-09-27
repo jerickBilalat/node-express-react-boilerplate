@@ -25,12 +25,11 @@ export function signsoutSuccess() {
 export const signup = credentials => dispatch => {
   dispatch(beginAjaxCall());
   return axios
-    .post("http://localhost:3000/signup", credentials)
+    .post("http://localhost:9000/signup", credentials)
     .then(res => {
       if (res.data.errorMessage) {
         dispatch(signupFailure(res.data.errorMessage));
       }
-      debugger;
       localStorage.setItem("token", res.data.token);
       dispatch(signupSuccess(res.data.userCredentials));
     })
@@ -43,7 +42,7 @@ export const signup = credentials => dispatch => {
 export const signin = credentials => dispatch => {
   dispatch(beginAjaxCall());
   return axios
-    .post("http://localhost:3000/signin", credentials)
+    .post("http://localhost:9000/signin", credentials)
     .then(res => {
       if (res.data.errorMessage) {
         dispatch(signupFailure(res.data.errorMessage));
