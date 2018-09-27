@@ -1,4 +1,5 @@
 import React from "react";
+import requireAuth from "./hocs/requireAuthHOC";
 
 import EventComponent from "./event/Event";
 
@@ -9,4 +10,4 @@ const Dashboard = () => (
   </div>
 );
 
-export default Dashboard;
+export default requireAuth(Dashboard);

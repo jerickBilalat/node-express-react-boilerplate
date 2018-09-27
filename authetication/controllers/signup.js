@@ -5,7 +5,7 @@ function validateEmailOrPassword(email, password, res) {
     // add email validation here
     if(!email||!password) {
         return res.status(422).send({
-            error: "You must provide email or password"
+            errorMessage: "You must provide email or password"
         })
     }
     if(!email) return null;
@@ -14,19 +14,20 @@ function validateEmailOrPassword(email, password, res) {
 
 module.exports.signup = (req, res, next) => {
 
-    const {email, password, role} = req.body
+    const {firstname, lastname, email, password, role} = req.body
 
     validateEmailOrPassword(email, password, res);    
 
     UserClass
         .findOne({email: email})
         .then( user => {
-            
             if(user) {
-                return res.status(422).send({ message: "Email is in use"})
+                return res.status(422).send({ errorMessage: "Email is in use"})
             }
 
             const newUser = new UserClass({
+                firstname,
+                lastname,
                 email,
                 password,
                 role
@@ -35,7 +36,7 @@ module.exports.signup = (req, res, next) => {
             newUser
                 .save()
                 .then( user => {
-                    res.json({role, token: generateToken(user)});
+                    res.json({userCredentials: {firstname, lastname, role, email}, token: generateToken(user)});
                 })
                 .catch( err => {
                     return next(err);
