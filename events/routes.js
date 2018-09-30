@@ -7,55 +7,69 @@ const Event = mongoose.model('Event');
   };
 
 module.exports = (app) => {
-    app.get('/api/events', (req, res) => {
-      Event.find({}).exec((err, events) => {
-            if(err) res.send(err);
+
+    app.get('/api/events', (req, res, next) => {
+      Event
+        .find({})
+        .exec((err, events) => {
+            if(err) next(err);
             res.send(events);
         });
-    })
-    app.post('/api/events', (req, res) => {
-        // const { title, body, author} = req.body;
-        const event = new Event({
-            title: "game day",
-            body: "you are all invited for game day sunday",
-            author: "Jerick Bilalat"
-        });
-        event.save();
+    });
 
-        res.send({"message": "post success"});
+    app.post('/api/events', (req, res, next) => {
+        const { title, body, author, authorRole} = req.body;
+        const event = new Event({
+            title,
+            body,
+            author,
+            authorRole
+        });
+        
+        event
+            .save()
+            .then(() => {
+                res.send({"message": "post success"});
+            })
+            .catch((err) => {
+                next(err);
+            });
     })
-    app.delete('/api/events/:id', (req, res) => {
+    app.delete('/api/events/:id', (req, res, next) => {
         const eventId = req.params.id;
         if(eventId){
             Event
                 .findByIdAndRemove(eventId)
                 .exec((err, event) => {
-                    if(err) res.send(err);
+                    if(err) next(err);
                     res.send({message: "event deleleted"})
                 }) 
         }
         
     })
-    app.put('/api/events/:id', (req, res) => {
-        const eventId = req.params.id;  
+    app.put('/api/events/:id', (req, res, next) => {
+        const eventId = req.params.id;
+        const {title, body, author, authorRole} = req.body;
+        console.log(title, body, author, authorRole);
         Event
             .findByIdAndUpdate(eventId)
             .exec((err, event) => {
                 if(!event) {
-                    sendJSONresponse(res, 404, {"message": "Event Id not found"})
+                    sendJSONresponse(res, 404, {"message": "Event not found"})
                     return;
                 }else if(err) {
-                    sendJSONresponse(res, 400, err);
-                    return;
+                    return next(err);
                 }
 
-                event.title = "Updated game day";
-                event.body= "Updated body";
-                event.author= "update Author";
+                event.title = title;
+                event.body= body;
+                event.author= author;
+                event.authorRole = authorRole;
 
                 event.save((err, event) => {
                     if(err) {
-                        sendJSONresponse(res, 404, err);
+                        console.log(err);
+                        next(err);
                     }else {
                         sendJSONresponse(res, 200, event);
                     }

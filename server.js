@@ -5,6 +5,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const requireJWT = require('./middlewares/requireJWT');
+const winston = require('winston');
+const debug = require('debug')('app:startup');
+
+
+winston.add(new winston.transports.File( { filename: "logfile.log"}));
 
 require('./events/model');
 require('./authetication/model');
@@ -12,16 +17,27 @@ require('./authetication/model');
 mongoose.Promise = global.Promise;
 mongoose
     .connect('mongodb://localhost/events_dev', {useMongoClient: true})
-    .then(() => { console.log("Database connection success")})
-    .catch((error) => console.warn('warning', error));
+    .then(() => { debug("Database connection success")})
+    .catch((error) => debug('warning', error));
 
 const app = express();
 
 app.set('port', process.env.PORT || 9000);
+app.set('view', './views');
+app.set('view engine', 'pug');
 
 app.use(bodyParser.json());
 app.use(cors());
 
+if(process.env === "development") {
+    app.use((err, req, res, next) => {
+        winston.error(err.message, err);
+        res.status(err.status || 500);
+    })
+}
+app.use(function(err, req, res, next) {
+    res.send({errorMessage: err.message})
+})
 
 // ROUTES
 require('./events/routes')(app);
@@ -38,5 +54,5 @@ app.get('/authRoute', requireJWT, (req,res) => {
 
 
 const server = app.listen(app.get('port'),() => {
-    console.log('Express listening to port: ' +  server.address().port);
+    debug('Express listening to port: ' +  server.address().port);
 });
