@@ -1,22 +1,9 @@
 const {generateToken} = require('../utils');
 const UserClass = require('../model');
 
-function validateEmailOrPassword(email, password, res) {
-    // add email validation here
-    if(!email||!password) {
-        return res.status(422).send({
-            errorMessage: "You must provide email or password"
-        })
-    }
-    if(!email) return null;
-    return email;
-}
-
 module.exports.signup = (req, res, next) => {
 
-    const {firstname, lastname, email, password, role} = req.body
-
-    validateEmailOrPassword(email, password, res);    
+    const {firstName, lastName, email, password, role} = req.body;
 
     UserClass
         .findOne({email: email})
@@ -26,8 +13,8 @@ module.exports.signup = (req, res, next) => {
             }
 
             const newUser = new UserClass({
-                firstname,
-                lastname,
+                firstName,
+                lastName,
                 email,
                 password,
                 role
@@ -36,7 +23,7 @@ module.exports.signup = (req, res, next) => {
             newUser
                 .save()
                 .then( user => {
-                    res.json({userCredentials: {firstname, lastname, role, email}, token: generateToken(user)});
+                    res.json({userCredentials: {firstName, lastName, role, email}, token: generateToken(user)});
                 })
                 .catch( err => {
                     return next(err);

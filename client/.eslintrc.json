@@ -9,12 +9,13 @@
     "class-methods-use-this": 0,
     "import/no-named-as-default": 0,
     "react/prop-types": 0,
+    "no-underscore-dangle": 0,
     "react/jsx-filename-extension": [
       "error",
       {
         "extensions": [".js", ".jsx"]
       }
     ],
-    "linebreak-style": "off"
+    "linebreak-style": 0
   }
 }

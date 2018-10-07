@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "./store/configureStore.dev";
-import { loadEvents } from "./actions/eventActions";
 
 import Dashboard from "./components/dashboard";
 import Header from "./components/header";
@@ -14,8 +13,6 @@ import SignInPage from "./components/auth/SignInPage";
 import "./styles.css";
 
 const store = configureStore();
-
-store.dispatch(loadEvents());
 
 function App() {
   return (

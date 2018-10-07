@@ -2,36 +2,40 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const EventItem = ({
-  id,
+  _id,
   title,
   author,
   authorRole,
   body,
-  createdAt,
-  onDeleteEvent
+  createdOn,
+  onDeleteEvent,
+  deleting
 }) => (
   <li>
     <h4>
-      <Link to={`/event/manage/${id}`}>{title}</Link>
-    </h4>    {" "}
-    |    {" "}
+      <Link to={`/event/manage/${_id}`}>{title}</Link>
+    </h4>
     <span>
-      <Link to={`/event/manage/${id}`}>Edit</Link>
-    </span>    {" "}
-    |    {" "}
+      <Link to={`/event/manage/${_id}`}>Edit</Link>
+    </span>
     <span>
-      <button onClick={e => onDeleteEvent(id, e)}>Delete</button>
-    </span>    {" "}
-    |     <span>{id}</span>
+      <input
+        type="button"
+        value={deleting ? "Deleting..." : "Delete"}
+        onClick={e => onDeleteEvent(_id, e)}
+      />
+    </span>
+    <span>{_id}</span>
     <p>{body}</p>
     <p>
-      By      {" "}
       <span>
-        {author} |         {authorRole}
+        {author}
+        {authorRole}
       </span>
     </p>
     <p>
-      Created at:       <span>{createdAt}</span>
+      <span>Created At:</span>
+      <span>{createdOn}</span>
     </p>
   </li>
 );

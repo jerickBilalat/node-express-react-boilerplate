@@ -11,8 +11,9 @@ const commentSchema = new Schema({
 const eventSchema = new Schema({
     title: {type: String, required: true},
     body: {type: String, required: true},
-    createdOn: {type: Date, "default": Date.now},
+    createdOn: {type: Date, default: Date.now},
     author: {type: String, required: true},
+    authorRole: {type: String, required: true},
     comments: [commentSchema]
 });
 

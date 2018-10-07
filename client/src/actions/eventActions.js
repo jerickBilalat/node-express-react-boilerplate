@@ -1,8 +1,8 @@
+import axios from "axios";
 import * as types from "./actionTypes";
 import { beginAjaxCall, ajaxCallError } from "./ajaxActions";
-import eventAPI from "../api/mockEventAPI";
 
-export function loadEventsSuccess(events) {
+export function fetchEventsSuccess(events) {
   return { type: types.LOAD_EVENTS_SUCCESS, events };
 }
 
@@ -18,33 +18,47 @@ export function deleteEventSuccess(eventID) {
   return { type: types.DELETE_EVENT_SUCCESS, eventID };
 }
 
-export function loadEvents() {
+export function fetchEvents() {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return eventAPI
-      .getAllEvents()
-      .then(events => {
-        dispatch(loadEventsSuccess(events));
+    return axios
+      .get("http://localhost:9000/api/events")
+      .then(res => {
+        dispatch(fetchEventsSuccess(res.data));
       })
-      .catch(error => {
-        throw error;
+      .catch(err => {
+        dispatch(ajaxCallError());
+        throw err;
       });
   };
 }
 
-export function saveEvent(event) {
+export function createEvent(newEvent) {
   return dispatch => {
     dispatch(beginAjaxCall);
-    return eventAPI
-      .saveEvent(event)
-      .then(savedEvent => {
-        event.id // eslint-disable-line no-unused-expressions
-          ? dispatch(updateEventSuccess(savedEvent)) // eslint-disable-line no-unused-expressions
-          : dispatch(createEventSuccess(savedEvent)); // eslint-disable-line no-unused-expressions
+    return axios
+      .post("http://localhost:9000/api/events", newEvent)
+      .then(res => {
+        dispatch(createEventSuccess(res.data));
       })
-      .catch(error => {
+      .catch(err => {
         dispatch(ajaxCallError());
-        throw error;
+        throw err;
+      });
+  };
+}
+
+export function updateEvent(event) {
+  return dispatch => {
+    dispatch(beginAjaxCall);
+    return axios
+      .put(`http://localhost:9000/api/events/${event._id}`, event)
+      .then(res => {
+        dispatch(updateEventSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(ajaxCallError());
+        throw err;
       });
   };
 }
@@ -52,9 +66,9 @@ export function saveEvent(event) {
 export function deleteEvent(eventID) {
   return dispatch => {
     dispatch(beginAjaxCall);
-    return eventAPI
-      .deleteEvent(eventID)
-      .then(() => dispatch(deleteEventSuccess(eventID)))
+    return axios
+      .delete(`http://localhost:9000/api/events/${eventID}`)
+      .then(response => dispatch(deleteEventSuccess(response.data._id)))
       .catch(error => {
         dispatch(ajaxCallError());
         throw error;

@@ -17,6 +17,10 @@ class ManageEventPage extends Component {
     this.saveEvent = this.saveEvent.bind(this);
   }
 
+  componentDidMount() {
+    this.assignAuth();
+  }
+
   // handle  input onChange
   updateEventState(e) {
     const { event: currentEvent } = this.state;
@@ -34,17 +38,43 @@ class ManageEventPage extends Component {
     if (!this.eventFormIsValid()) return;
 
     this.setState({ saving: true });
+    if (!event._id) {
+      actions
+        .createEvent(event)
+        .then(() => {
+          console.log("notify create success");
+          this.redirect();
+        })
+        .catch(error => {
+          // notify error
+          console.log(error);
+          this.setState({ saving: false });
+        });
+    } else {
+      actions
+        .updateEvent(event)
+        .then(() => {
+          console.log("notify update success");
+          this.redirect();
+        })
+        .catch(error => {
+          // notify error
+          console.log(error);
+          this.setState({ saving: false });
+        });
+    }
+  }
 
-    actions
-      .saveEvent(event)
-      .then(() => {
-        this.redirect();
-      })
-      .catch(error => {
-        // notify error
-        console.log(error);
-        this.setState({ saving: false });
-      });
+  assignAuth() {
+    const { event } = this.state;
+    const {
+      auth: { userCredentials }
+    } = this.props;
+    const { firstName, lastName, role } = userCredentials;
+    debugger;
+    event.author = `${firstName} ${lastName}`;
+    event.authorRole = `${role}`;
+    this.setState(event);
   }
 
   redirect() {
@@ -99,28 +129,27 @@ class ManageEventPage extends Component {
 }
 
 function getEventByID(events, id) {
-  const event = events.filter(item => item.id === id);
+  const event = events.filter(item => item._id === id);
   if (event) return event[0];
   return null;
 }
 
 function mapStateToProps(state, ownProps) {
+  debugger;
   const events = state.eventReducer;
   const eventID = ownProps.match.params.id;
   let event = {
-    id: "",
     title: "",
     body: "",
-    author: "Auth User name",
-    authorRole: "Auth User role",
-    createdAt: ""
+    author: "",
+    authorRole: ""
   };
   if (eventID && events.length > 0) {
     event = getEventByID(events, eventID);
   }
   return {
-    events,
-    event
+    event,
+    auth: state.authReducer
   };
 }
 

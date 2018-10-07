@@ -13,7 +13,7 @@ const events = [
     body: "Bring food to share",
     author: "Jane Doe",
     authorRole: "Administrator",
-    createdAt: "1536592953966"
+    createdOn: "1536592953966"
   },
   {
     id: "1",
@@ -21,7 +21,7 @@ const events = [
     body: "Get ready",
     author: "Jane Doe",
     authorRole: "Administrator",
-    createdAt: "1536592953966"
+    createdOn: "1536592953966"
   },
   {
     id: "2",
@@ -29,7 +29,7 @@ const events = [
     body: "Prayer Meeting every Wenesday from 7pm to 8pm",
     author: "Jane Doe",
     authorRole: "Administrator",
-    createdAt: "1536592953966"
+    createdOn: "1536592953966"
   }
 ];
 

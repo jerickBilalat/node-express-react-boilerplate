@@ -2,9 +2,12 @@ import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
 export default function authReducer(state = initialState.auth, action) {
-  if (action.type === types.SIGNUP_SUCCESS || types.SIGNIN_SUCCESS) {
-    const { userCredentials } = action;
-    return { ...state, userCredentials };
+  if (
+    action.type === types.SIGNUP_SUCCESS ||
+    action.type === types.SIGNIN_SUCCESS
+  ) {
+    const { auth } = action;
+    return Object.assign({}, state, auth);
   }
   if (
     action.type === types.SIGNUP_FAILURE ||

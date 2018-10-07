@@ -9,10 +9,9 @@ const winston = require('winston');
 const debug = require('debug')('app:startup');
 
 
-winston.add(new winston.transports.File( { filename: "logfile.log"}));
-
 require('./events/model');
 require('./authetication/model');
+require('./services/cache');
 
 mongoose.Promise = global.Promise;
 mongoose
@@ -31,7 +30,6 @@ app.use(cors());
 
 if(process.env === "development") {
     app.use((err, req, res, next) => {
-        winston.error(err.message, err);
         res.status(err.status || 500);
     })
 }

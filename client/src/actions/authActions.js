@@ -2,16 +2,16 @@ import axios from "axios";
 import * as types from "./actionTypes";
 import { beginAjaxCall, ajaxCallError } from "./ajaxActions";
 
-export function signupSuccess(userCredentials) {
-  return { type: types.SIGNUP_SUCCESS, userCredentials };
+export function signupSuccess(auth) {
+  return { type: types.SIGNUP_SUCCESS, auth };
 }
 
 export function signupFailure(errorMessage) {
   return { type: types.SIGNUP_FAILURE, errorMessage };
 }
 
-export function signinSuccess(userCredentials) {
-  return { type: types.SIGNIN_SUCCESS, userCredentials };
+export function signinSuccess(auth) {
+  return { type: types.SIGNIN_SUCCESS, auth };
 }
 
 export function signinFailure(errorMessage) {
@@ -25,14 +25,13 @@ export function signsoutSuccess() {
 export const signup = credentials => dispatch => {
   dispatch(beginAjaxCall());
   return axios
-    .post("http://localhost:3000/signup", credentials)
+    .post("http://localhost:9000/signup", credentials)
     .then(res => {
       if (res.data.errorMessage) {
         dispatch(signupFailure(res.data.errorMessage));
       }
-      debugger;
       localStorage.setItem("token", res.data.token);
-      dispatch(signupSuccess(res.data.userCredentials));
+      dispatch(signupSuccess(res.data));
     })
     .catch(error => {
       dispatch(ajaxCallError());
@@ -43,13 +42,14 @@ export const signup = credentials => dispatch => {
 export const signin = credentials => dispatch => {
   dispatch(beginAjaxCall());
   return axios
-    .post("http://localhost:3000/signin", credentials)
+    .post("http://localhost:9000/signin", credentials)
     .then(res => {
       if (res.data.errorMessage) {
-        dispatch(signupFailure(res.data.errorMessage));
+        dispatch(signinFailure(res.data.errorMessage));
       }
       localStorage.setItem("token", res.data.token);
-      dispatch(signupSuccess(res.data.userCredentials));
+      debugger;
+      dispatch(signinSuccess(res.data));
     })
     .catch(error => {
       dispatch(ajaxCallError());

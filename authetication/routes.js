@@ -7,7 +7,7 @@ const {signin: signinController} = require('./controllers/signin');
 
 module.exports = app => {
 
-    app.post('/signup', requireMember, signupController);
+    app.post('/signup', signupController);
     app.post('/signin', requireLocal, signinController);
 
 }
