@@ -48,7 +48,7 @@ export const signin = credentials => dispatch => {
         dispatch(signinFailure(res.data.errorMessage));
       }
       localStorage.setItem("token", res.data.token);
-      debugger;
+      ;
       dispatch(signinSuccess(res.data));
     })
     .catch(error => {

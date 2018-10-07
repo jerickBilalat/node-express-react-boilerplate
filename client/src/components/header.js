@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 class Header extends Component {
   renderLinks() {
     const { auth } = this.props;
-    debugger;
     return !auth ? (
       <nav>
         <Link to="/auth/signup">Sign Up | </Link>

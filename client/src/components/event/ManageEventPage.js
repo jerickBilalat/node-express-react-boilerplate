@@ -71,7 +71,6 @@ class ManageEventPage extends Component {
       auth: { userCredentials }
     } = this.props;
     const { firstName, lastName, role } = userCredentials;
-    debugger;
     event.author = `${firstName} ${lastName}`;
     event.authorRole = `${role}`;
     this.setState(event);
@@ -135,7 +134,6 @@ function getEventByID(events, id) {
 }
 
 function mapStateToProps(state, ownProps) {
-  debugger;
   const events = state.eventReducer;
   const eventID = ownProps.match.params.id;
   let event = {
