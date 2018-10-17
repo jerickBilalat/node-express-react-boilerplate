@@ -41,13 +41,9 @@ class ManageEventPage extends Component {
     if (!event._id) {
       actions
         .createEvent(event)
-        .then(() => {
-          console.log("notify create success");
-          this.redirect();
-        })
+        .then(() => this.redirect())
         .catch(error => {
           // notify error
-          console.log(error);
           this.setState({ saving: false });
         });
     } else {
@@ -79,7 +75,6 @@ class ManageEventPage extends Component {
   redirect() {
     const { history } = this.props;
     this.setState({ saving: false });
-    // notify success
     return history.push("/");
   }
 
@@ -153,7 +148,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(eventActions, dispatch)
+    actions: bindActionCreators({ ...eventActions }, dispatch)
   };
 }
 

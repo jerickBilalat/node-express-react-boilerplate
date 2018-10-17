@@ -9,6 +9,12 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+function mapStateToProps(state) {
+  return {
+    auth: state.authReducer
+  };
+}
+
 class SignInPage extends Component {
   constructor(props) {
     super(props);
@@ -27,13 +33,18 @@ class SignInPage extends Component {
     e.preventDefault();
     const { actions, history } = this.props;
     const { credentials } = this.state;
+    const mockCredentials = {
+      email: "jrk.email@yahoo.com",
+      password: "Jerixm#26"
+    };
     return actions
-      .signin(credentials)
+      .signin(mockCredentials)
       .then(() => {
         history.push("/");
       })
       .catch(error => {
-        throw error;
+        const { auth } = this.props;
+        return this.setState({ errors: { errorMessage: auth.errorMessage } });
       });
   };
 
@@ -52,12 +63,19 @@ class SignInPage extends Component {
     const errors = {};
     const { credentials } = this.state;
 
-    if (credentials.email.length < 6) {
+    if (Object.keys(credentials).length === 0) {
+      isFormValid = false;
+    }
+
+    if (Object.keys(credentials).length === 0 || credentials.email.length < 6) {
       errors.email = "Title or password must be more than 6 characters";
       isFormValid = false;
     }
 
-    if (credentials.password.length < 6) {
+    if (
+      Object.keys(credentials).length === 0 ||
+      credentials.password.length < 6
+    ) {
       errors.password = "Password must be more than 6 chracters";
       isFormValid = false;
     }
@@ -66,31 +84,55 @@ class SignInPage extends Component {
     return isFormValid;
   }
 
+  isFormClean() {
+    const { credentials } = this.state;
+    let formIsClean = true;
+    if (
+      Object.keys(credentials).length > 0 &&
+      (credentials.email &&
+        credentials.email.length > 0 &&
+        credentials.password &&
+        credentials.password.length > 0)
+    ) {
+      formIsClean = false;
+    }
+    return formIsClean;
+  }
+
   render() {
     const { errors } = this.state;
+
     return (
-      <form>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={this.onInputChange}
-        />
-        {errors && <span>{errors.email}</span>}
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={this.onInputChange}
-        />
-        {errors && <span>{errors.password}</span>}
-        <input type="submit" onClick={this.onFormSubmit} />
-      </form>
+      <div>
+        <form>
+          {errors && <span>{errors.errorMessage}</span>}
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={this.onInputChange}
+          />
+          {errors && <span>{errors.email}</span>}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={this.onInputChange}
+          />
+          {errors && <span>{errors.password}</span>}
+          <input
+            type="submit"
+            onClick={this.onFormSubmit}
+            value="submit"
+            disabled={this.isFormClean()}
+          />
+        </form>
+      </div>
     );
   }
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(SignInPage);

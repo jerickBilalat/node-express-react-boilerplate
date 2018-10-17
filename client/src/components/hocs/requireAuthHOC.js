@@ -14,8 +14,8 @@ export default ChildComponent => {
     }
 
     shouldNavigateAway() {
-      const { history } = this.props;
-      if (!localStorage.getItem("token")) {
+      const { history, auth } = this.props;
+      if (!auth) {
         history.push("/auth/signin");
       }
     }

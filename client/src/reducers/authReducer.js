@@ -14,7 +14,7 @@ export default function authReducer(state = initialState.auth, action) {
     action.type === types.SIGNIN_FAILURE
   ) {
     const { errorMessage } = action;
-    return { ...state, errorMessage };
+    return { errorMessage };
   }
   if (action.type === types.SIGNOUT_SUCCESS) {
     return initialState.auth;

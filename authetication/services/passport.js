@@ -13,13 +13,15 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
   // if it is the correct email and password
   // otherwise, call done with false
   User.findOne({ email: email }, function(err, user) {
+    
     if (err) { return done(err); }
     if (!user) { return done(null, false); }
     // compare passwords - is `password` equal to user.password?
     user.comparePassword(password, function(err, isMatch) {
-      if (err) { console.log(err); return done(err); }
+        
+      if (err) { return done(err); }
+      
       if (!isMatch) { return done(null, false); }
-      console.log(user);
       return done(null, user);
     });
   });

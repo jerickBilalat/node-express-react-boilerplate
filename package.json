@@ -8,8 +8,9 @@
     "npm": "5.6.0"
   },
   "scripts": {
-    "start": "nodemon server.js",
-    "dev": "set DEBUG=app:startup && nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js | pino-colada",
+    "debug": "node --inspect server.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,12 +20,15 @@
     "cors": "^2.8.4",
     "debug": "^4.0.1",
     "express": "^4.16.3",
+    "express-pino-logger": "^4.0.0",
     "jwt-simple": "^0.5.1",
     "mongoose": "^4.11.1",
     "nodemon": "^1.18.4",
+    "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pino": "^5.7.0",
     "pug": "^2.0.3",
     "redis": "^2.8.0",
     "winston": "^3.1.0"

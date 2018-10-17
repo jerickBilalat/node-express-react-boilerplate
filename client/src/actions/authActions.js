@@ -2,6 +2,17 @@ import axios from "axios";
 import * as types from "./actionTypes";
 import { beginAjaxCall, ajaxCallError } from "./ajaxActions";
 
+// axios.interceptors.response.use(
+//   response => response,
+//   error => {
+//     const { status } = error.response;
+//     if (status === 401) {
+//       dispatch(signupFailure());
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 export function signupSuccess(auth) {
   return { type: types.SIGNUP_SUCCESS, auth };
 }
@@ -27,15 +38,12 @@ export const signup = credentials => dispatch => {
   return axios
     .post("http://localhost:9000/signup", credentials)
     .then(res => {
-      if (res.data.errorMessage) {
-        dispatch(signupFailure(res.data.errorMessage));
-      }
       localStorage.setItem("token", res.data.token);
-      dispatch(signupSuccess(res.data));
+      return dispatch(signupSuccess(res.data));
     })
     .catch(error => {
+      dispatch(signupFailure(error.response.data.errorMessage));
       dispatch(ajaxCallError());
-      throw error;
     });
 };
 
@@ -48,10 +56,10 @@ export const signin = credentials => dispatch => {
         dispatch(signinFailure(res.data.errorMessage));
       }
       localStorage.setItem("token", res.data.token);
-      ;
       dispatch(signinSuccess(res.data));
     })
     .catch(error => {
+      dispatch(signinFailure(error.response.data.errorMessage));
       dispatch(ajaxCallError());
       throw error;
     });

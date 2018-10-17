@@ -15,18 +15,15 @@ class Event extends Component {
     this.onDeleteEvent = this.onDeleteEvent.bind(this);
   }
 
-  componentDidMount() {
-    const { actions } = this.props;
-    actions.fetchEvents();
-  }
-
   // eslint-disable-next-line no-unused-vars
   onDeleteEvent(eventID, e) {
     const { actions } = this.props;
     actions
       .deleteEvent(eventID)
-      .then(() => console.log("notify delete success"))
-      .catch(error => console.log(error));
+      .then(() => console.log("nofity delete success"))
+      .catch(error => {
+        throw error;
+      });
   }
 
   render() {

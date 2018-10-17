@@ -52,11 +52,6 @@ class SignUpPage extends Component {
     const { credentials } = this.state;
     const { confirmPasswordKey } = this.state;
 
-    // if (emailRegEx.test(credentials.email)) {
-    //   errors.email = "Email is not valid";
-    //   isFormValid = false;
-    // }
-
     if (credentials.password.length < 6) {
       errors.password = "Password must be more than 6 chracters";
       isFormValid = false;
@@ -70,6 +65,23 @@ class SignUpPage extends Component {
 
     this.setState({ errors });
     return isFormValid;
+  }
+
+  isFormClean() {
+    const { credentials } = this.state;
+    let formIsClean = true;
+    if (
+      Object.keys(credentials).length === 5 &&
+      (credentials.firstName.length > 0 &&
+        credentials.lastName.length > 0 &&
+        credentials.role.length > 0 &&
+        credentials.password.length > 0 &&
+        credentials.email.length > 0 &&
+        credentials.password.length > 0)
+    ) {
+      formIsClean = false;
+    }
+    return formIsClean;
   }
 
   render() {
@@ -112,7 +124,7 @@ class SignUpPage extends Component {
         />
         {errors && <span>{errors.password}</span>}
         <input
-          type="text"
+          type="password"
           name="confirmPasswordKey"
           placeholder="Confirm Password"
           onChange={this.onInputChange}
@@ -122,6 +134,7 @@ class SignUpPage extends Component {
           type="submit"
           value={signing ? "Signing Up..." : "Submit"}
           onClick={this.onFormSubmit}
+          disabled={this.isFormClean()}
         />
       </form>
     );

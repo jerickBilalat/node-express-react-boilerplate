@@ -9,8 +9,8 @@ export default function eventReducer(state = initialState.events, action) {
       return [...state, Object.assign({}, action.event)];
     case types.UPDATE_EVENT_SUCCESS:
       return [
-        ...state.filter(event => event._id !== action.event._id),
-        Object.assign({}, action.event)
+        Object.assign({}, action.event),
+        ...state.filter(event => event._id !== action.event._id)
       ];
     case types.DELETE_EVENT_SUCCESS:
       return [...state.filter(event => event._id !== action.eventID)];

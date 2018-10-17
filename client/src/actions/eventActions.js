@@ -43,7 +43,7 @@ export function createEvent(newEvent) {
       })
       .catch(err => {
         dispatch(ajaxCallError());
-        throw err;
+        throw err.response;
       });
   };
 }
