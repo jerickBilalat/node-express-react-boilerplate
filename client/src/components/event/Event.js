@@ -17,11 +17,12 @@ class Event extends Component {
 
   // eslint-disable-next-line no-unused-vars
   onDeleteEvent(eventID, e) {
-    const { actions } = this.props;
+    const { actions, notify } = this.props;
     actions
       .deleteEvent(eventID)
-      .then(() => console.log("nofity delete success"))
+      .then(() => notify("success", "Event deleted."))
       .catch(error => {
+        notify("error", "Delete event failed.");
         throw error;
       });
   }

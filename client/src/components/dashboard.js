@@ -3,10 +3,10 @@ import requireAuth from "./hocs/requireAuthHOC";
 
 import EventComponent from "./event/Event";
 
-const Dashboard = () => (
+const Dashboard = props => (
   <div>
     <h1>Dashboard</h1>
-    <EventComponent />
+    <EventComponent notify={props.notify} />
   </div>
 );
 

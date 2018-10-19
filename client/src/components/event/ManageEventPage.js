@@ -32,31 +32,36 @@ class ManageEventPage extends Component {
 
   // handle form onSave
   saveEvent(e) {
-    const { actions } = this.props;
+    const { actions, notify } = this.props;
     const { event } = this.state;
     e.preventDefault();
-    if (!this.eventFormIsValid()) return;
+    if (!this.eventFormIsValid()) return notify("error", "Form is invalid.");
 
     this.setState({ saving: true });
+
     if (!event._id) {
       actions
         .createEvent(event)
-        .then(() => this.redirect())
+        .then(() => {
+          notify("success", "Event Created.");
+          return this.redirect();
+        })
         .catch(error => {
-          // notify error
           this.setState({ saving: false });
+          notify("error", "Create Event failed.");
+          throw error;
         });
     } else {
       actions
         .updateEvent(event)
         .then(() => {
-          console.log("notify update success");
-          this.redirect();
+          notify("success", "Event Updated.");
+          return this.redirect();
         })
         .catch(error => {
-          // notify error
-          console.log(error);
+          notify("error", "Event Update Error.");
           this.setState({ saving: false });
+          throw error;
         });
     }
   }
