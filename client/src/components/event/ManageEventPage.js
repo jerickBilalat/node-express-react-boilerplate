@@ -15,6 +15,7 @@ class ManageEventPage extends Component {
     };
     this.updateEventState = this.updateEventState.bind(this);
     this.saveEvent = this.saveEvent.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +36,7 @@ class ManageEventPage extends Component {
     const { actions, notify } = this.props;
     const { event } = this.state;
     e.preventDefault();
-    if (!this.eventFormIsValid()) return notify("error", "Form is invalid.");
+    if (!this.eventFormIsValid()) notify("error", "Form is invalid.");
 
     this.setState({ saving: true });
 
@@ -44,7 +45,7 @@ class ManageEventPage extends Component {
         .createEvent(event)
         .then(() => {
           notify("success", "Event Created.");
-          return this.redirect();
+          this.redirect();
         })
         .catch(error => {
           this.setState({ saving: false });
@@ -56,7 +57,7 @@ class ManageEventPage extends Component {
         .updateEvent(event)
         .then(() => {
           notify("success", "Event Updated.");
-          return this.redirect();
+          this.redirect();
         })
         .catch(error => {
           notify("error", "Event Update Error.");
@@ -64,6 +65,10 @@ class ManageEventPage extends Component {
           throw error;
         });
     }
+  }
+
+  cancel() {
+    this.redirect();
   }
 
   assignAuth() {
@@ -79,7 +84,8 @@ class ManageEventPage extends Component {
 
   redirect() {
     const { history } = this.props;
-    this.setState({ saving: false });
+    const { saving } = this.state;
+    if (!saving) this.setState({ saving: false });
     return history.push("/");
   }
 
@@ -121,6 +127,7 @@ class ManageEventPage extends Component {
             value={saving ? "Saving..." : "Save"}
             onClick={this.saveEvent}
           />
+          <input type="button" value="Cancel" onClick={this.cancel} />
         </form>
       </div>
     );
