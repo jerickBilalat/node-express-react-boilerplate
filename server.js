@@ -83,3 +83,8 @@ app.get('/authRoute', requireJWT, (req,res) => {
 const server = app.listen(app.get('port'),() => {
 	pino.info('Express listening to port: ' +  app.get('port'));
 });
+
+
+module.exports = {
+	app
+}

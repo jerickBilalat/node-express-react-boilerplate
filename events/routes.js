@@ -20,6 +20,7 @@ module.exports = (app) => {
 				.exec((err, events) => {
 					if(err) return next(err);
 					if(!events.length) return sendJSONresponse(res, 204, { "errorMessage": "No events found" });
+					console.log(res);
 					return sendJSONresponse(res, 200, events);
 				})
 		});
