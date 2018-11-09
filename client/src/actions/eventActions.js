@@ -2,6 +2,8 @@ import axios from "axios";
 import * as types from "./actionTypes";
 import { beginAjaxCall, ajaxCallError } from "./ajaxActions";
 
+axios.defaults.headers.common.authorization = localStorage.getItem("token");
+
 export function fetchEventsSuccess(events) {
   return { type: types.LOAD_EVENTS_SUCCESS, events };
 }

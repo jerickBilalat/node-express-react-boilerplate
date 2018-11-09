@@ -15,6 +15,11 @@ class Event extends Component {
     this.onDeleteEvent = this.onDeleteEvent.bind(this);
   }
 
+  componentDidMount() {
+    const { actions } = this.props;
+    actions.fetchEvents();
+  }
+
   // eslint-disable-next-line no-unused-vars
   onDeleteEvent(eventID, e) {
     const { actions, notify } = this.props;

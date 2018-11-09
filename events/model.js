@@ -17,4 +17,8 @@ const eventSchema = new Schema({
     comments: [commentSchema]
 });
 
-mongoose.model('Event', eventSchema);
+const Event = mongoose.model('Event', eventSchema);
+
+module.exports = {
+    Event
+}

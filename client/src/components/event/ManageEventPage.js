@@ -36,12 +36,14 @@ class ManageEventPage extends Component {
     const { actions, notify } = this.props;
     const { event } = this.state;
     e.preventDefault();
-    if (!this.eventFormIsValid()) notify("error", "Form is invalid.");
+    if (!this.eventFormIsValid()) {
+      return notify("error", "Form is invalid.");
+    }
 
     this.setState({ saving: true });
 
     if (!event._id) {
-      actions
+      return actions
         .createEvent(event)
         .then(() => {
           notify("success", "Event Created.");
@@ -52,19 +54,18 @@ class ManageEventPage extends Component {
           notify("error", "Create Event failed.");
           throw error;
         });
-    } else {
-      actions
-        .updateEvent(event)
-        .then(() => {
-          notify("success", "Event Updated.");
-          this.redirect();
-        })
-        .catch(error => {
-          notify("error", "Event Update Error.");
-          this.setState({ saving: false });
-          throw error;
-        });
     }
+    return actions
+      .updateEvent(event)
+      .then(() => {
+        notify("success", "Event Updated.");
+        this.redirect();
+      })
+      .catch(error => {
+        notify("error", "Event Update Error.");
+        this.setState({ saving: false });
+        throw error;
+      });
   }
 
   cancel() {
