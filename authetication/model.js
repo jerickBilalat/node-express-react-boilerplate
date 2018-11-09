@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jwt-simple');
+const config = require('config');
 
 const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -63,7 +65,12 @@ UserSchema.methods.comparePassword = function(candidatePassword, callback) {
         
       callback(null, isMatch);
     });
-  }
+}
+
+UserSchema.methods.generateAuthToken = function() {
+  const timeStamp = new Date().getTime();
+    return jwt.encode({sub: this._id, iat: timeStamp}, config.get('jwtPrivateKey'));
+}
 
 const User = mongoose.model('User', UserSchema);
 

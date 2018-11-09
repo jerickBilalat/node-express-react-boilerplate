@@ -1,31 +1,26 @@
 const mongoose = require('mongoose');
 const Event = mongoose.model('Event');
+const requireJWT = require('../middlewares/requireJWT');
 
  function sendJSONresponse(res, status, content) {
 	 	res.status(status);
 		res.json(content);
 	};
 
-	function asyncWrapper(fn) {
-		return function(req, res, next) {
-			fn(req, res, next).catch( err => next(err));
-		}
-	}
 
 module.exports = (app) => {
 
-		app.get('/api/events', (req, res, next) => {
+		app.get('/api/events', requireJWT, (req, res, next) => {
 			Event
 				.find({})
 				.exec((err, events) => {
 					if(err) return next(err);
 					if(!events.length) return sendJSONresponse(res, 204, { "errorMessage": "No events found" });
-					console.log(res);
 					return sendJSONresponse(res, 200, events);
 				})
 		});
 
-		app.post('/api/events', (req, res, next) => {
+		app.post('/api/events', requireJWT, (req, res, next) => {
 			const { title, body, author, authorRole} = req.body;
 			Event
 				.create({
@@ -50,7 +45,7 @@ module.exports = (app) => {
 			}
 		})
 		
-		app.put('/api/events/:id', (req, res, next) => {
+		app.put('/api/events/:id', requireJWT, (req, res, next) => {
 				const eventId = req.params.id;
 				const {title, body, author, authorRole} = req.body;
 				const createdOn = Date.now();
@@ -59,8 +54,5 @@ module.exports = (app) => {
 					if(err) return next(err);
 					res.send(event);
 				})
-				// const event = await Event.findByIdAndUpdate(eventId, {title, body, author, authorRole, createdOn }, {runValidators: true});
-				// console.log(event);
-				// res.send(event);
 		})
 }

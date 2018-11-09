@@ -1,26 +1,22 @@
 
 const express = require('express');
-const keys = require('./config/keys');
+const config = require('config');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const requireJWT = require('./middlewares/requireJWT');
-const debug = require('debug')('app:startup');
-const errorLogger = require('./middlewares/errorLogger');
-const errorHandler = require('./middlewares/errorHandler');
 const pino = require('pino')();
 const logger = require('express-pino-logger')({ instance: pino });
-
 const app = express();
 
-app.set('port', process.env.PORT || 9000);
+app.set('port', process.env.PORT || config.get('port'));
 app.set('view', './views');
 app.set('view engine', 'pug');
 
 mongoose.Promise = global.Promise;
 mongoose
-	.connect('mongodb://localhost/events_dev', {useMongoClient: true})
-	.then(() => { pino.info("Database connection success")})
+	.connect(config.get('db'), {useMongoClient: true})
+	.then(() => { pino.info(`Connceted Database is ${config.get('db')}`)})
 	.catch((error) => pino.info('Database Connection Errorr: ' + error));
 
 require('./events/model');
@@ -35,6 +31,13 @@ app.use(logger);
 
 require('./events/routes')(app);
 require('./authetication/routes')(app);
+app.get('/', (req,res) => {
+	res.send('Hello World. Events API.');
+});
+
+app.get('/authRoute', requireJWT, (req,res) => {
+	res.send('Hello Protected Route');
+});
 
 // ERROR HANDLERS
 // catch 404 errors
@@ -66,25 +69,14 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.json({
-		errrorMessage: err.message,
+		errorMessage: err.message,
 		error: {}
 	});
 });
 
-
-app.get('/', (req,res) => {
-	res.send('Hello World');
-});
-
-app.get('/authRoute', requireJWT, (req,res) => {
-	res.send('Hello Protected Route');
-});
-
 const server = app.listen(app.get('port'),() => {
-	pino.info('Express listening to port: ' +  app.get('port'));
+	pino.info('Express listening to port: ' +  app.get('port') + " in " + config.get('envName'));
 });
 
 
-module.exports = {
-	app
-}
+module.exports = server;

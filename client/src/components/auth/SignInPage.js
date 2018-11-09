@@ -34,8 +34,8 @@ class SignInPage extends Component {
     const { actions, history } = this.props;
     const { credentials } = this.state;
     const mockCredentials = {
-      email: "jrk.email@yahoo.com",
-      password: "Jerixm#26"
+      email: "administrator@example.com",
+      password: "Passw@rd1"
     };
     return actions
       .signin(mockCredentials)
